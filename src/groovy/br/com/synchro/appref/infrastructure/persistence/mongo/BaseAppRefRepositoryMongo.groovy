@@ -3,6 +3,7 @@ package br.com.synchro.appref.infrastructure.persistence.mongo
 import br.com.synchro.appref.domain.shared.BaseAppRefRepository
 import br.com.synchro.infrastructure.persistence.GormCrudRepository
 import org.bson.types.ObjectId
+import org.apache.commons.lang.Validate
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,12 +20,18 @@ class BaseAppRefRepositoryMongo<T> extends GormCrudRepository<Serializable, T> i
 
     @Override
     T findOne(final Serializable id){
-        clazz.get(new ObjectId(id))
+        Validate.notNull(id, "[Id] cannot be null")
+        final objectId = id instanceof ObjectId? id: new ObjectId(id)
+
+        clazz.get(objectId)
     }
 
     @Override
     Boolean exists(final Serializable id){
-        clazz.exists(new ObjectId(id))
+        Validate.notNull(id, "[Id] cannot be null")
+        final objectId = id instanceof ObjectId? id: new ObjectId(id)
+
+        clazz.exists(objectId)
     }
 
     @Override
